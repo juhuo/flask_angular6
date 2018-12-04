@@ -1,0 +1,34 @@
+<h1>{{title}}</h1>
+<nav>
+  <a routerLink="/week">Week</a>
+  <a routerLink="/month">Month</a>
+  <a routerLink="/month/90">3 Month</a>
+
+  <div style="float:right">
+  <mat-form-field>
+  <mat-select placeholder="Select Data:" [formControl]="toppings" multiple [(ngModel)]="selectedValue" (selectionChange)="addSelValue($event.value)">
+    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+  </mat-select>
+  </mat-form-field>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
+
+
+<div style="position: fixed;  top: auto;  bottom: 0;">
+<p></p>
+
+<h1></h1>
+<button (click)="onClickMsgBtn()">{{msgBtn}}</button>
+<div *ngIf="showMsg">
+  {{selectedValue}}
+  <app-messages></app-messages>
+</div>
+
+</div>
+
+
+<!--
+<button mat-raised-button (click)="unregister()" color="warn">Unregister</button>
+-->

@@ -1,0 +1,90 @@
+import { Component } from '@angular/core';
+import { WeatherService } from './weather.service';
+import { Chart } from 'chart.js';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'charts';
+  chart = []; // This will hold our chart info
+
+  constructor(private _weather: WeatherService) {}
+
+  ngOnInit() {
+    this._weather.dailyForecast()
+      .subscribe(res => {
+
+        /*
+        console.log(res)
+
+        let temp_max = res['list'].map(res => res.main.temp_max);
+		let temp_min = res['list'].map(res => res.main.temp_min);
+		let alldates = res['list'].map(res => res.dt)
+
+		let weatherDates = []
+		alldates.forEach((res) => {
+		    let jsdate = new Date(res * 1000)
+		    weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }))
+		})
+		*/
+
+        //console.log(res["main"]);
+
+		let temp = res['main']['temp']; 
+		// let temp = res['main'].map(res => res.temp);
+		let humidity = res['main']["humidity"]; //.map(res => res.main);
+        
+        let weatherDates = [];
+        let alldates = [10000,20000, 100000];
+        alldates.forEach((res) => {
+            let jsdate = new Date(res * 1000)
+            weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }))
+        })
+		console.log(temp, humidity, weatherDates);
+
+        let temp_min = [23,29];
+        let humidity_min = [30, 12];
+
+        temp_min.push(temp);
+        humidity_min.push(humidity);
+
+        // draw chart!!!
+
+		this.chart = new Chart('canvas', {
+          type: 'line',
+          data: {
+            labels: weatherDates,
+            datasets: [
+              { 
+                data: temp_min,
+                borderColor: "#3cba9f",
+                fill: false
+              },
+              { 
+                data: humidity_min,
+                borderColor: "#ffcc00",
+                fill: false
+              },
+            ]
+          },
+          options: {
+            legend: {
+              display: false
+            },
+            scales: {
+              xAxes: [{
+                display: true
+              }],
+              yAxes: [{
+                display: true
+              }],
+            }
+          }
+        });
+		
+      })
+  }
+}
